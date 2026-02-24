@@ -1,76 +1,72 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
-</p>
+## Proyecto VincoBov
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+### Integrantes
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg" alt="Donate us"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow" alt="Follow us on Twitter"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+- **Samuel Domínguez**
+- **Natalia**
+- **Mariana**
+- **Sahara**
 
-## Description
+### Problema que se desea resolver
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+El problema que se desea resolver es **facilitar la compra de ganado, cultivos y mercado refinado** mediante una aplicación, debido a que actualmente no existe ninguna plataforma que ayude a las personas a realizar este tipo de transacciones de forma específica para el sector agropecuario.  
 
-## Project setup
+El objetivo es **volver el proceso de compra y venta más efectivo y eficaz** para los usuarios, reduciendo fricciones, intermediarios innecesarios y mejorando la visibilidad de los productos rurales.
 
-```bash
-$ npm install
-```
+### Público objetivo
 
-## Compile and run the project
+El público objetivo son:
 
-```bash
-# development
-$ npm run start
+- Personas que trabajan en **cría de ganado** y cuentan con animales que desean vender.
+- **Granjeros y agricultores** que requieren ampliar sus bases económicas, ya que necesitan diversos suministros relacionados con el campo (insumos, cultivos, productos derivados, etc.).
 
-# watch mode
-$ npm run start:dev
+### Propuesta de valor de la solución
 
-# production mode
-$ npm run start:prod
-```
+Nuestra propuesta de valor ofrece al público un **ecosistema digital especializado en el sector agropecuario**, donde criadores y agricultores pueden publicar, gestionar y vender sus productos —como ganado, cultivos y derivados (leche, huevos, lana, etc.)— de manera **efectiva, sencilla y confiable**.
 
-## Run tests
+A diferencia de plataformas generales de comercio como Mercado Libre o Facebook Marketplace, nuestra aplicación está diseñada **específicamente para el sector rural**, priorizando:
 
-```bash
-# unit tests
-$ npm run test
+- Sus **dinámicas productivas**.
+- Sus **necesidades logísticas**.
+- Las particularidades del **mercado agropecuario**.
 
-# e2e tests
-$ npm run test:e2e
+De este modo, aportamos valor a los usuarios mediante:
 
-# test coverage
-$ npm run test:cov
-```
+- **Especialización sectorial**: la plataforma está pensada para el campo y sus procesos.
+- **Facilidad de publicación y compra en un solo lugar**.
+- **Optimización del proceso comercial**, reduciendo intermediarios.
+- **Mayor alcance de clientes potenciales**, mejorando la rentabilidad del productor.
+- **Digitalización del sector rural**, acercando la tecnología a productores y compradores.
 
-## Deployment
+### Alcance general del sistema
 
-When you're ready to deploy your NestJS application to production, there are some key steps you can take to ensure it runs as efficiently as possible. Check out the [deployment documentation](https://docs.nestjs.com/deployment) for more information.
+El sistema permite que:
 
-If you are looking for a cloud-based platform to deploy your NestJS application, check out [Mau](https://mau.nestjs.com), our official platform for deploying NestJS applications on AWS. Mau makes deployment straightforward and fast, requiring just a few simple steps:
+- El **vendedor** suba sus artículos (ganado, cultivos o mercado refinado) a la plataforma.
+- El **comprador** (público objetivo) pueda buscar, filtrar y adquirir dichos productos.
+
+Esto se implementa mediante un backend desarrollado con **NestJS** y **TypeORM**, que gestiona usuarios, roles, permisos y productos de forma estructurada.
+
+---
+
+## Configuración del proyecto (Project setup)
+
+Para instalar las dependencias del proyecto, ejecutar en la carpeta del backend (`vincobov/`):
 
 ```bash
-$ npm install -g @nestjs/mau
-$ mau deploy
+npm install
 ```
 
-With Mau, you can deploy your application in just a few clicks, allowing you to focus on building features rather than managing infrastructure.
+## Compilar y ejecutar el proyecto
 
+### Modo desarrollo
 
-## License
+```bash
+npm run start
+```
 
-Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
+### Modo watch (recarga automática)
+
+```bash
+npm run start:dev
+```
