@@ -5,6 +5,8 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { UsuariosModule } from './usuarios/usuarios.module';
+import { PedidosModule } from './pedidos/pedidos.module';
+import { PagosModule } from './pagos/pagos.module';
 
 type SupportedDbTypes =
   | 'mysql'
@@ -30,6 +32,8 @@ type SupportedDbTypes =
       synchronize: process.env.DB_SYNCHRONIZE === 'true',
     }),
     UsuariosModule,
+    PedidosModule,
+    PagosModule,
   ],
   controllers: [AppController],
   providers: [AppService],
