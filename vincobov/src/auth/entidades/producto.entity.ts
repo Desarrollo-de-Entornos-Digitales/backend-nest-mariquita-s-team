@@ -7,6 +7,7 @@ import {
 } from 'typeorm';
 
 import { Categoria } from './categoria.entity';
+import { Usuario } from '../../usuarios/entidades/usuario.entity';
 
 @Entity('productos')
 export class Producto {
@@ -25,8 +26,9 @@ export class Producto {
   @Column()
   precio: number;
 
-  @Column({ length: 255 })
-  creado_por: string;
+  @ManyToOne(() => Usuario, (usuario) => usuario.productos)
+  @JoinColumn({ name: 'usuario_id' })
+  creado_por: Usuario;
 
   @ManyToOne(() => Categoria, (categoria) => categoria.productos)
   @JoinColumn({ name: 'categoria_id' })

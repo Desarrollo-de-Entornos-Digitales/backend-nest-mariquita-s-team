@@ -5,8 +5,11 @@ import {
   CreateDateColumn,
   ManyToOne,
   JoinColumn,
+  OneToMany,
 } from 'typeorm';
+
 import { Rol } from '../../auth/entidades/rol.entity';
+import { Producto } from '../../auth/entidades/producto.entity';
 
 @Entity('usuarios')
 export class Usuario {
@@ -22,6 +25,9 @@ export class Usuario {
   @ManyToOne(() => Rol)
   @JoinColumn({ name: 'rol_id' })
   rol: Rol;
+
+  @OneToMany(() => Producto, (producto) => producto.creado_por)
+  productos: Producto[];
 
   @CreateDateColumn({ type: 'timestamp' })
   creado_en: Date;

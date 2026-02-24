@@ -3,9 +3,10 @@
 ### Integrantes
 
 - **Samuel Domínguez**
-- **Natalia**
-- **Mariana**
-- **Sahara**
+- **Natalia Tovar Diaz**
+- **Mariana Grisales Gomez**
+- **Sahara Estrella**
+
 
 ### Problema que se desea resolver
 
