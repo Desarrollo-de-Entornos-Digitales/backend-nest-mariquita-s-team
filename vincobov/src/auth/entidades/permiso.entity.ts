@@ -1,4 +1,6 @@
-import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
+
+import { PermisoRol } from './permiso-rol.entity';
 
 @Entity('permisos')
 export class Permiso {
@@ -10,4 +12,7 @@ export class Permiso {
 
   @Column({ length: 255 })
   description: string;
+
+  @OneToMany(() => PermisoRol, (permisoRol) => permisoRol.permiso)
+  permisosRol: PermisoRol[];
 }

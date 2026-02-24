@@ -3,24 +3,26 @@ import {
   PrimaryGeneratedColumn,
   Column,
   CreateDateColumn,
+  ManyToOne,
+  JoinColumn,
 } from 'typeorm';
+import { Rol } from '../../auth/entidades/rol.entity';
 
-// eslint-disable-next-line @typescript-eslint/no-unsafe-call
 @Entity('usuarios')
 export class Usuario {
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-call
   @PrimaryGeneratedColumn()
   id: number;
 
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-call
   @Column({ length: 255 })
   nombre: string;
 
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-call
   @Column({ length: 255, unique: true })
   email: string;
 
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-call
+  @ManyToOne(() => Rol)
+  @JoinColumn({ name: 'rol_id' })
+  rol: Rol;
+
   @CreateDateColumn({ type: 'timestamp' })
   creado_en: Date;
 }

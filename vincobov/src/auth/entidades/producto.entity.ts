@@ -6,10 +6,10 @@ export class Producto {
   id: number;
 
   @Column({ unique: true, length: 100 })
-  name: string;
+  nombre: string;
 
   @Column({ length: 255 })
-  description: string;
+  descripcion: string;
 
   @Column()
   stock: number;
