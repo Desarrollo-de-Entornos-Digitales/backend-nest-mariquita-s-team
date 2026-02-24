@@ -1,18 +1,18 @@
 import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
 
-import { Producto } from './producto.entity';
+import { Product } from './producto.entity';
 
-@Entity('categorias')
-export class Categoria {
+@Entity('categories')
+export class Category {
   @PrimaryGeneratedColumn()
   id: number;
 
   @Column({ unique: true, length: 100 })
-  nombre: string;
+  name: string;
 
   @Column({ length: 255 })
-  descripcion: string;
+  description: string;
 
-  @OneToMany(() => Producto, (producto) => producto.categoria)
-  productos: Producto[];
+  @OneToMany(() => Product, (product) => product.category)
+  products: Product[];
 }

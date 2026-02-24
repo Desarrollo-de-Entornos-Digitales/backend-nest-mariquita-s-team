@@ -1,22 +1,22 @@
 import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
 
-import { Usuario } from '../../usuarios/entidades/usuario.entity';
-import { PermisoRol } from './permiso-rol.entity';
+import { User } from '../../usuarios/entidades/usuario.entity';
+import { RolePermission } from './permiso-rol.entity';
 
 @Entity('roles')
-export class Rol {
+export class Role {
   @PrimaryGeneratedColumn()
   id: number;
 
   @Column({ unique: true, length: 100 })
-  nombre: string;
+  name: string;
 
   @Column({ length: 255 })
-  descripcion: string;
+  description: string;
 
-  @OneToMany(() => Usuario, (usuario) => usuario.rol)
-  usuarios: Usuario[];
+  @OneToMany(() => User, (user) => user.role)
+  users: User[];
 
-  @OneToMany(() => PermisoRol, (permisoRol) => permisoRol.rol)
-  permisosRol: PermisoRol[];
+  @OneToMany(() => RolePermission, (rolePermission) => rolePermission.role)
+  rolePermissions: RolePermission[];
 }

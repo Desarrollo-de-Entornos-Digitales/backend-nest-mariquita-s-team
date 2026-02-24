@@ -6,31 +6,34 @@ import {
   JoinColumn,
 } from 'typeorm';
 
-import { Categoria } from './categoria.entity';
-import { Usuario } from '../../usuarios/entidades/usuario.entity';
+import { Category } from './categoria.entity';
+import { User } from '../../usuarios/entidades/usuario.entity';
 
-@Entity('productos')
-export class Producto {
+@Entity('products')
+export class Product {
   @PrimaryGeneratedColumn()
   id: number;
 
   @Column({ unique: true, length: 100 })
-  nombre: string;
+  name: string;
 
   @Column({ length: 255 })
-  descripcion: string;
+  description: string;
 
   @Column()
   stock: number;
 
   @Column()
-  precio: number;
+  price: number;
 
-  @ManyToOne(() => Usuario, (usuario) => usuario.productos)
-  @JoinColumn({ name: 'usuario_id' })
-  creado_por: Usuario;
+  @ManyToOne(() => User, (user) => user.products)
+  @JoinColumn({ name: 'user_id' })
+  createdBy: User;
 
-  @ManyToOne(() => Categoria, (categoria) => categoria.productos)
-  @JoinColumn({ name: 'categoria_id' })
-  categoria: Categoria;
+  @ManyToOne(() => Category, (category) => category.products)
+  @JoinColumn({ name: 'category_id' })
+  category: Category;
+
+  @Column({ nullable: true, length: 500 })
+  imageUrl: string;
 }

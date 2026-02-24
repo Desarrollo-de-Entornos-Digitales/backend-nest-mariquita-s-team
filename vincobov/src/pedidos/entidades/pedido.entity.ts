@@ -8,36 +8,36 @@ import {
   OneToMany,
 } from 'typeorm';
 
-import { Usuario } from '../../usuarios/entidades/usuario.entity';
-import { Producto } from '../../auth/entidades/producto.entity';
-import { Pago } from '../../pagos/entidades/pago.entity';
+import { User } from '../../usuarios/entidades/usuario.entity';
+import { Product } from '../../auth/entidades/producto.entity';
+import { Payment } from '../../pagos/entidades/pago.entity';
 
-@Entity('pedidos')
-export class Pedido {
+@Entity('orders')
+export class Order {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @ManyToOne(() => Usuario)
-  @JoinColumn({ name: 'comprador_id' })
-  comprador: Usuario;
+  @ManyToOne(() => User)
+  @JoinColumn({ name: 'buyer_id' })
+  buyer: User;
 
-  @ManyToOne(() => Usuario)
-  @JoinColumn({ name: 'vendedor_id' })
-  vendedor: Usuario;
+  @ManyToOne(() => User)
+  @JoinColumn({ name: 'seller_id' })
+  seller: User;
 
-  @ManyToOne(() => Producto)
-  @JoinColumn({ name: 'producto_id' })
-  producto: Producto;
-
-  @Column()
-  cantidad: number;
+  @ManyToOne(() => Product)
+  @JoinColumn({ name: 'product_id' })
+  product: Product;
 
   @Column()
-  total_pago: number;
+  quantity: number;
 
-  @OneToMany(() => Pago, (pago) => pago.pedido)
-  pagos: Pago[];
+  @Column()
+  totalAmount: number;
+
+  @OneToMany(() => Payment, (payment: Payment) => payment.order)
+  payments: Payment[];
 
   @CreateDateColumn({ type: 'timestamp' })
-  fecha_creacion: Date;
+  createdAt: Date;
 }

@@ -8,27 +8,27 @@ import {
   OneToMany,
 } from 'typeorm';
 
-import { Rol } from '../../auth/entidades/rol.entity';
-import { Producto } from '../../auth/entidades/producto.entity';
+import { Role } from '../../auth/entidades/rol.entity';
+import { Product } from '../../auth/entidades/producto.entity';
 
-@Entity('usuarios')
-export class Usuario {
+@Entity('users')
+export class User {
   @PrimaryGeneratedColumn()
   id: number;
 
   @Column({ length: 255 })
-  nombre: string;
+  name: string;
 
   @Column({ length: 255, unique: true })
   email: string;
 
-  @ManyToOne(() => Rol)
-  @JoinColumn({ name: 'rol_id' })
-  rol: Rol;
+  @ManyToOne(() => Role)
+  @JoinColumn({ name: 'role_id' })
+  role: Role;
 
-  @OneToMany(() => Producto, (producto) => producto.creado_por)
-  productos: Producto[];
+  @OneToMany(() => Product, (product: Product) => product.createdBy)
+  products: Product[];
 
   @CreateDateColumn({ type: 'timestamp' })
-  creado_en: Date;
+  createdAt: Date;
 }

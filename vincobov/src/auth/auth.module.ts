@@ -1,11 +1,11 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
-import { Rol } from './entidades/rol.entity';
-import { Permiso } from './entidades/permiso.entity';
-import { PermisoRol } from './entidades/permiso-rol.entity';
+import { Role } from './entidades/rol.entity';
+import { Permission } from './entidades/permiso.entity';
+import { RolePermission } from './entidades/permiso-rol.entity';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Rol, Permiso, PermisoRol])],
+  imports: [TypeOrmModule.forFeature([Role, Permission, RolePermission])],
 })
 export class AuthModule {}
