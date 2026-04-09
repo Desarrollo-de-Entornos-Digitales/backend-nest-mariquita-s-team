@@ -15,5 +15,5 @@ export class CreateUserDto {
   bio?: string;
 
   @IsInt()
-  roleId: number = 0;
+  roleId: number;
 }
