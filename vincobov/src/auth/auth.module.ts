@@ -1,6 +1,7 @@
 import { Module } from '@nestjs/common';
 import { JwtModule } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
+import { PassportModule } from '@nestjs/passport';
 import type { StringValue } from 'ms';
 
 import { AuthController } from './auth.controller';
@@ -13,6 +14,7 @@ import { RoleModule } from './role/role.module';
   imports: [
     UserModule,
     RoleModule,
+    PassportModule.register({ defaultStrategy: 'jwt' }),
     JwtModule.registerAsync({
       inject: [ConfigService],
       useFactory: (config: ConfigService) => ({
