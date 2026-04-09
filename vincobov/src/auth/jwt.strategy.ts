@@ -1,31 +1,35 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import { PassportStrategy } from '@nestjs/passport';
-import { ExtractJwt, Strategy } from 'passport-jwt';
 import { InjectRepository } from '@nestjs/typeorm';
+import { ExtractJwt, Strategy } from 'passport-jwt';
 import { Repository } from 'typeorm';
-import { User } from './user/entities/user.entity'; // Ruta según tu estructura
+
+import { User } from './entities/user.entity';
 
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy) {
-  constructor(
-    @InjectRepository(User)
-    private readonly userRepository: Repository<User>,
-  ) {
-    super({
-      jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
-      ignoreExpiration: false,
-      secretOrKey: 'CLAVE_SECRETA_VINCOBOV_2026', // Debe coincidir con el modulo
-    });
-  }
+    constructor(
+        @InjectRepository(User)
+        private readonly userRepository: Repository<User>,
+        configService: ConfigService, // Inyectamos el configService
+    ) {
+        super({
+            jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
+            ignoreExpiration: false,
+            // Leemos el mismo secreto que definieron en el AuthModule
+            secretOrKey: configService.get<string>('JWT_SECRET') ?? 'change_me',
+        });
+    }
 
-  // Si el token es válido, extraemos el ID y buscamos al usuario
-  async validate(payload: { id: number }) {
-    const { id } = payload;
-    const user: User | null = await this.userRepository.findOneBy({ id });
+    async validate(payload: { id: number }) {
+        const { id } = payload;
+        const user = await this.userRepository.findOneBy({ id });
 
-    if (!user) throw new UnauthorizedException('Token no válido');
-    
-    // Retornamos el usuario para que Nest lo ponga en el Request
-    return user;
-  }
+        if (!user) {
+            throw new UnauthorizedException('Token no válido o usuario inexistente');
+        }
+
+        return user; // Este usuario se inyectará en req.user
+    }
 }
