@@ -5,6 +5,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { AuthModule } from './auth/auth.module';
+import { MarketplaceModule } from './marketplace/marketplace.module';
 import { ProductsModule } from './products/products.module';
 
 type SupportedDbTypes =
@@ -34,6 +35,7 @@ type SupportedDbTypes =
     }),
 
     AuthModule,
+    MarketplaceModule,
     ProductsModule,
   ],
   controllers: [AppController],
