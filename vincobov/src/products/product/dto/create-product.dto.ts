@@ -26,5 +26,5 @@ export class CreateProductDto {
 
   @IsNumber()
   @Min(1)
-  createdBy: number;
+  createdBy: number; //any
 }
