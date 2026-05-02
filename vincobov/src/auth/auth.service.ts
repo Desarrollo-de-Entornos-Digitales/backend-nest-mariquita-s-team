@@ -16,6 +16,10 @@ export interface AuthLoginResponse {
   access_token: string;
 }
 
+export interface AuthLogoutResponse {
+  message: string;
+}
+
 @Injectable()
 export class AuthService {
   constructor(
@@ -57,6 +61,13 @@ export class AuthService {
     return {
       user: { id: user.id, email: user.email },
       access_token: this.jwtService.sign(payload),
+    };
+  }
+
+  logout(): AuthLogoutResponse {
+    return {
+      message:
+        'Logout exitoso. El cliente debe eliminar el token JWT y finalizar la sesion local.',
     };
   }
 }
