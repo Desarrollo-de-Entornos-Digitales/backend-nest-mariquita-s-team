@@ -1,0 +1,174 @@
+{
+  "info": {
+    "name": "Vincobov API",
+    "_postman_id": "56b4fd4a-f0a9-4f2c-a7a0-6f5e3be0a0c0",
+    "description": "Coleccion para probar todas las rutas expuestas.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    { "key": "baseUrl", "value": "http://localhost:3000" },
+    { "key": "tokenAdmin", "value": "" },
+    { "key": "tokenSeller", "value": "" },
+    { "key": "tokenBuyer", "value": "" }
+  ],
+  "item": [
+    {
+      "name": "Auth",
+      "item": [
+        {
+          "name": "Login Admin",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"email\": \"admin@vincobov.com\",\n  \"password\": \"Admin123*\"\n}" },
+            "url": "{{baseUrl}}/auth/login"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status 200/201', function () { pm.expect([200,201]).to.include(pm.response.code); });",
+                  "const data = pm.response.json();",
+                  "if (data.access_token) pm.environment.set('tokenAdmin', data.access_token);"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Login Seller",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"email\": \"seller1@vincobov.com\",\n  \"password\": \"Seller123*\"\n}" },
+            "url": "{{baseUrl}}/auth/login"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const data = pm.response.json();",
+                  "if (data.access_token) pm.environment.set('tokenSeller', data.access_token);"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Login Buyer",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"email\": \"buyer1@vincobov.com\",\n  \"password\": \"Buyer123*\"\n}" },
+            "url": "{{baseUrl}}/auth/login"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const data = pm.response.json();",
+                  "if (data.access_token) pm.environment.set('tokenBuyer', data.access_token);"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Logout",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Authorization", "value": "Bearer {{tokenAdmin}}" }],
+            "url": "{{baseUrl}}/auth/logout"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Users",
+      "item": [
+        { "name": "Create User", "request": { "method": "POST", "header": [{ "key": "Content-Type", "value": "application/json" }], "body": { "mode": "raw", "raw": "{\n  \"username\": \"demo_user\",\n  \"email\": \"demo_user@vincobov.com\",\n  \"password\": \"Demo123*\",\n  \"bio\": \"Usuario demo\",\n  \"roleId\": 3\n}" }, "url": "{{baseUrl}}/users" } },
+        { "name": "Get Users", "request": { "method": "GET", "header": [{ "key": "Authorization", "value": "Bearer {{tokenAdmin}}" }], "url": "{{baseUrl}}/users" } },
+        { "name": "Get User By Id", "request": { "method": "GET", "header": [{ "key": "Authorization", "value": "Bearer {{tokenAdmin}}" }], "url": "{{baseUrl}}/users/1" } },
+        { "name": "Update User", "request": { "method": "PATCH", "header": [{ "key": "Authorization", "value": "Bearer {{tokenAdmin}}" }, { "key": "Content-Type", "value": "application/json" }], "body": { "mode": "raw", "raw": "{\n  \"bio\": \"Actualizado por Postman\"\n}" }, "url": "{{baseUrl}}/users/1" } },
+        { "name": "Delete User", "request": { "method": "DELETE", "header": [{ "key": "Authorization", "value": "Bearer {{tokenAdmin}}" }], "url": "{{baseUrl}}/users/4" } }
+      ]
+    },
+    {
+      "name": "Roles",
+      "item": [
+        { "name": "Create Role", "request": { "method": "POST", "header": [{ "key": "Authorization", "value": "Bearer {{tokenAdmin}}" }, { "key": "Content-Type", "value": "application/json" }], "body": { "mode": "raw", "raw": "{\n  \"name\": \"auditor\",\n  \"description\": \"Rol de ejemplo\"\n}" }, "url": "{{baseUrl}}/roles" } },
+        { "name": "Get Roles", "request": { "method": "GET", "header": [{ "key": "Authorization", "value": "Bearer {{tokenAdmin}}" }], "url": "{{baseUrl}}/roles" } },
+        { "name": "Get Role By Id", "request": { "method": "GET", "header": [{ "key": "Authorization", "value": "Bearer {{tokenAdmin}}" }], "url": "{{baseUrl}}/roles/1" } },
+        { "name": "Update Role", "request": { "method": "PUT", "header": [{ "key": "Authorization", "value": "Bearer {{tokenAdmin}}" }, { "key": "Content-Type", "value": "application/json" }], "body": { "mode": "raw", "raw": "{\n  \"description\": \"Rol actualizado\"\n}" }, "url": "{{baseUrl}}/roles/1" } },
+        { "name": "Delete Role", "request": { "method": "DELETE", "header": [{ "key": "Authorization", "value": "Bearer {{tokenAdmin}}" }], "url": "{{baseUrl}}/roles/4" } }
+      ]
+    },
+    {
+      "name": "Product",
+      "item": [
+        { "name": "Create Product", "request": { "method": "POST", "header": [{ "key": "Authorization", "value": "Bearer {{tokenAdmin}}" }, { "key": "Content-Type", "value": "application/json" }], "body": { "mode": "raw", "raw": "{\n  \"title\": \"Producto demo\",\n  \"description\": \"Producto para pruebas\",\n  \"category\": \"crop\",\n  \"price\": 1500,\n  \"stock\": 20,\n  \"location\": \"Tunja\",\n  \"createdBy\": 2\n}" }, "url": "{{baseUrl}}/product" } },
+        { "name": "Get Products", "request": { "method": "GET", "header": [{ "key": "Authorization", "value": "Bearer {{tokenAdmin}}" }], "url": "{{baseUrl}}/product" } },
+        { "name": "Get Product By Id", "request": { "method": "GET", "header": [{ "key": "Authorization", "value": "Bearer {{tokenAdmin}}" }], "url": "{{baseUrl}}/product/1" } },
+        { "name": "Update Product", "request": { "method": "PATCH", "header": [{ "key": "Authorization", "value": "Bearer {{tokenAdmin}}" }, { "key": "Content-Type", "value": "application/json" }], "body": { "mode": "raw", "raw": "{\n  \"stock\": 18\n}" }, "url": "{{baseUrl}}/product/1" } },
+        { "name": "Purchase Product", "request": { "method": "POST", "header": [{ "key": "Authorization", "value": "Bearer {{tokenBuyer}}" }, { "key": "Content-Type", "value": "application/json" }], "body": { "mode": "raw", "raw": "{\n  \"quantity\": 1\n}" }, "url": "{{baseUrl}}/product/1/purchase" } },
+        { "name": "Delete Product", "request": { "method": "DELETE", "header": [{ "key": "Authorization", "value": "Bearer {{tokenAdmin}}" }], "url": "{{baseUrl}}/product/1" } }
+      ]
+    },
+    {
+      "name": "Categories",
+      "item": [
+        { "name": "Create Category", "request": { "method": "POST", "header": [{ "key": "Authorization", "value": "Bearer {{tokenAdmin}}" }, { "key": "Content-Type", "value": "application/json" }], "body": { "mode": "raw", "raw": "{\n  \"name\": \"Ganado\",\n  \"description\": \"Categoria ganadera\"\n}" }, "url": "{{baseUrl}}/categories" } },
+        { "name": "Get Categories", "request": { "method": "GET", "header": [{ "key": "Authorization", "value": "Bearer {{tokenAdmin}}" }], "url": "{{baseUrl}}/categories" } },
+        { "name": "Get Category By Id", "request": { "method": "GET", "header": [{ "key": "Authorization", "value": "Bearer {{tokenAdmin}}" }], "url": "{{baseUrl}}/categories/1" } },
+        { "name": "Update Category", "request": { "method": "PATCH", "header": [{ "key": "Authorization", "value": "Bearer {{tokenAdmin}}" }, { "key": "Content-Type", "value": "application/json" }], "body": { "mode": "raw", "raw": "{\n  \"description\": \"Categoria actualizada\"\n}" }, "url": "{{baseUrl}}/categories/1" } },
+        { "name": "Delete Category", "request": { "method": "DELETE", "header": [{ "key": "Authorization", "value": "Bearer {{tokenAdmin}}" }], "url": "{{baseUrl}}/categories/1" } }
+      ]
+    },
+    {
+      "name": "Orders",
+      "item": [
+        { "name": "Create Order", "request": { "method": "POST", "header": [{ "key": "Authorization", "value": "Bearer {{tokenBuyer}}" }, { "key": "Content-Type", "value": "application/json" }], "body": { "mode": "raw", "raw": "{\n  \"buyerId\": 3,\n  \"productId\": 1,\n  \"quantity\": 1,\n  \"unitPrice\": 1200,\n  \"status\": \"pending\"\n}" }, "url": "{{baseUrl}}/orders" } },
+        { "name": "Get Orders", "request": { "method": "GET", "header": [{ "key": "Authorization", "value": "Bearer {{tokenAdmin}}" }], "url": "{{baseUrl}}/orders" } },
+        { "name": "Get Order By Id", "request": { "method": "GET", "header": [{ "key": "Authorization", "value": "Bearer {{tokenAdmin}}" }], "url": "{{baseUrl}}/orders/1" } },
+        { "name": "Update Order", "request": { "method": "PATCH", "header": [{ "key": "Authorization", "value": "Bearer {{tokenAdmin}}" }, { "key": "Content-Type", "value": "application/json" }], "body": { "mode": "raw", "raw": "{\n  \"status\": \"paid\"\n}" }, "url": "{{baseUrl}}/orders/1" } },
+        { "name": "Delete Order", "request": { "method": "DELETE", "header": [{ "key": "Authorization", "value": "Bearer {{tokenAdmin}}" }], "url": "{{baseUrl}}/orders/1" } }
+      ]
+    },
+    {
+      "name": "Payments",
+      "item": [
+        { "name": "Create Payment", "request": { "method": "POST", "header": [{ "key": "Authorization", "value": "Bearer {{tokenBuyer}}" }, { "key": "Content-Type", "value": "application/json" }], "body": { "mode": "raw", "raw": "{\n  \"orderId\": 1,\n  \"amount\": 1200,\n  \"paymentMethod\": \"transfer\",\n  \"status\": \"completed\"\n}" }, "url": "{{baseUrl}}/payments" } },
+        { "name": "Get Payments", "request": { "method": "GET", "header": [{ "key": "Authorization", "value": "Bearer {{tokenAdmin}}" }], "url": "{{baseUrl}}/payments" } },
+        { "name": "Get Payment By Id", "request": { "method": "GET", "header": [{ "key": "Authorization", "value": "Bearer {{tokenAdmin}}" }], "url": "{{baseUrl}}/payments/1" } },
+        { "name": "Update Payment", "request": { "method": "PATCH", "header": [{ "key": "Authorization", "value": "Bearer {{tokenAdmin}}" }, { "key": "Content-Type", "value": "application/json" }], "body": { "mode": "raw", "raw": "{\n  \"status\": \"failed\"\n}" }, "url": "{{baseUrl}}/payments/1" } },
+        { "name": "Delete Payment", "request": { "method": "DELETE", "header": [{ "key": "Authorization", "value": "Bearer {{tokenAdmin}}" }], "url": "{{baseUrl}}/payments/1" } }
+      ]
+    },
+    {
+      "name": "Chats",
+      "item": [
+        { "name": "Create Chat", "request": { "method": "POST", "header": [{ "key": "Authorization", "value": "Bearer {{tokenSeller}}" }, { "key": "Content-Type", "value": "application/json" }], "body": { "mode": "raw", "raw": "{\n  \"sellerId\": 2,\n  \"buyerId\": 3\n}" }, "url": "{{baseUrl}}/chats" } },
+        { "name": "Get Chats", "request": { "method": "GET", "header": [{ "key": "Authorization", "value": "Bearer {{tokenAdmin}}" }], "url": "{{baseUrl}}/chats" } },
+        { "name": "Get Chat By Id", "request": { "method": "GET", "header": [{ "key": "Authorization", "value": "Bearer {{tokenAdmin}}" }], "url": "{{baseUrl}}/chats/1" } },
+        { "name": "Update Chat", "request": { "method": "PATCH", "header": [{ "key": "Authorization", "value": "Bearer {{tokenAdmin}}" }, { "key": "Content-Type", "value": "application/json" }], "body": { "mode": "raw", "raw": "{\n  \"buyerId\": 1\n}" }, "url": "{{baseUrl}}/chats/1" } },
+        { "name": "Delete Chat", "request": { "method": "DELETE", "header": [{ "key": "Authorization", "value": "Bearer {{tokenAdmin}}" }], "url": "{{baseUrl}}/chats/1" } }
+      ]
+    },
+    {
+      "name": "Messages",
+      "item": [
+        { "name": "Create Message", "request": { "method": "POST", "header": [{ "key": "Authorization", "value": "Bearer {{tokenSeller}}" }, { "key": "Content-Type", "value": "application/json" }], "body": { "mode": "raw", "raw": "{\n  \"chatId\": 1,\n  \"senderId\": 2,\n  \"content\": \"Hola comprador\"\n}" }, "url": "{{baseUrl}}/messages" } },
+        { "name": "Get Messages", "request": { "method": "GET", "header": [{ "key": "Authorization", "value": "Bearer {{tokenAdmin}}" }], "url": "{{baseUrl}}/messages" } },
+        { "name": "Get Message By Id", "request": { "method": "GET", "header": [{ "key": "Authorization", "value": "Bearer {{tokenAdmin}}" }], "url": "{{baseUrl}}/messages/1" } },
+        { "name": "Update Message", "request": { "method": "PATCH", "header": [{ "key": "Authorization", "value": "Bearer {{tokenAdmin}}" }, { "key": "Content-Type", "value": "application/json" }], "body": { "mode": "raw", "raw": "{\n  \"content\": \"Mensaje actualizado\"\n}" }, "url": "{{baseUrl}}/messages/1" } },
+        { "name": "Delete Message", "request": { "method": "DELETE", "header": [{ "key": "Authorization", "value": "Bearer {{tokenAdmin}}" }], "url": "{{baseUrl}}/messages/1" } }
+      ]
+    }
+  ]
+}
