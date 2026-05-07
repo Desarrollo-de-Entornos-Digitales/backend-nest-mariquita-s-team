@@ -168,28 +168,48 @@ ON CONFLICT (email) DO UPDATE SET
   bio = EXCLUDED.bio,
   role_id = EXCLUDED.role_id;
 
-INSERT INTO products (title, description, category, price, stock, location, created_by)
+INSERT INTO products (title, description, image_url, category, price, stock, location, created_by)
 SELECT * FROM (
   VALUES
-    ('Novillo cebado premium', 'Novillos para levante y ceba con control sanitario', 'livestock'::products_category_enum, 4800000.00, 12, 'Duitama', (SELECT id FROM users WHERE email = 'seller1@vincobov.com')),
-    ('Vacas lecheras Holstein', 'Lote de vacas de alta produccion', 'livestock'::products_category_enum, 6200000.00, 8, 'Sogamoso', (SELECT id FROM users WHERE email = 'seller3@vincobov.com')),
-    ('Ovejas de cria', 'Ovejas criollas adaptadas a clima frio', 'livestock'::products_category_enum, 540000.00, 30, 'Paipa', (SELECT id FROM users WHERE email = 'seller3@vincobov.com')),
-    ('Papa pastusa seleccionada', 'Papa limpia por bulto de 50kg', 'crop'::products_category_enum, 110000.00, 140, 'Tunja', (SELECT id FROM users WHERE email = 'seller2@vincobov.com')),
-    ('Tomate chonto fresco', 'Canastilla de tomate de primera calidad', 'crop'::products_category_enum, 68000.00, 200, 'Samaca', (SELECT id FROM users WHERE email = 'seller2@vincobov.com')),
-    ('Cebolla larga organica', 'Atados frescos cosechados el mismo dia', 'crop'::products_category_enum, 22000.00, 300, 'Villa de Leyva', (SELECT id FROM users WHERE email = 'seller2@vincobov.com')),
-    ('Arroz blanco premium', 'Arroz refinado para consumo masivo', 'refined'::products_category_enum, 85000.00, 220, 'Bogota', (SELECT id FROM users WHERE email = 'seller5@vincobov.com')),
-    ('Frijol cargamanto clasificado', 'Grano seco seleccionado y limpio', 'refined'::products_category_enum, 145000.00, 100, 'Bucaramanga', (SELECT id FROM users WHERE email = 'seller5@vincobov.com')),
-    ('Harina de maiz amarillo', 'Empaque de 25kg para panaderia y arepas', 'refined'::products_category_enum, 92000.00, 90, 'Chiquinquira', (SELECT id FROM users WHERE email = 'seller5@vincobov.com')),
-    ('Queso campesino artesanal', 'Queso fresco elaborado en finca', 'refined'::products_category_enum, 32000.00, 160, 'Ubate', (SELECT id FROM users WHERE email = 'seller4@vincobov.com')),
-    ('Leche cruda refrigerada', 'Leche de tanque con control de calidad', 'refined'::products_category_enum, 4200.00, 1200, 'Paz de Rio', (SELECT id FROM users WHERE email = 'seller4@vincobov.com')),
-    ('Melaza para alimento', 'Suplemento energetico para ganado', 'refined'::products_category_enum, 59000.00, 70, 'Moniquira', (SELECT id FROM users WHERE email = 'seller1@vincobov.com'))
-) AS seed_products(title, description, category, price, stock, location, created_by)
+    ('Novillo cebado premium', 'Novillos para levante y ceba con control sanitario', 'https://images.pexels.com/photos/735968/pexels-photo-735968.jpeg?auto=compress&cs=tinysrgb&w=1200', 'livestock'::products_category_enum, 4800000.00, 12, 'Duitama', (SELECT id FROM users WHERE email = 'seller1@vincobov.com')),
+    ('Vacas lecheras Holstein', 'Lote de vacas de alta produccion', 'https://images.pexels.com/photos/422218/pexels-photo-422218.jpeg?auto=compress&cs=tinysrgb&w=1200', 'livestock'::products_category_enum, 6200000.00, 8, 'Sogamoso', (SELECT id FROM users WHERE email = 'seller3@vincobov.com')),
+    ('Ovejas de cria', 'Ovejas criollas adaptadas a clima frio', 'https://images.pexels.com/photos/751689/pexels-photo-751689.jpeg?auto=compress&cs=tinysrgb&w=1200', 'livestock'::products_category_enum, 540000.00, 30, 'Paipa', (SELECT id FROM users WHERE email = 'seller3@vincobov.com')),
+    ('Papa pastusa seleccionada', 'Papa limpia por bulto de 50kg', 'https://images.pexels.com/photos/2286776/pexels-photo-2286776.jpeg?auto=compress&cs=tinysrgb&w=1200', 'crop'::products_category_enum, 110000.00, 140, 'Tunja', (SELECT id FROM users WHERE email = 'seller2@vincobov.com')),
+    ('Tomate chonto fresco', 'Canastilla de tomate de primera calidad', 'https://images.pexels.com/photos/1327838/pexels-photo-1327838.jpeg?auto=compress&cs=tinysrgb&w=1200', 'crop'::products_category_enum, 68000.00, 200, 'Samaca', (SELECT id FROM users WHERE email = 'seller2@vincobov.com')),
+    ('Cebolla larga organica', 'Atados frescos cosechados el mismo dia', 'https://images.pexels.com/photos/533280/pexels-photo-533280.jpeg?auto=compress&cs=tinysrgb&w=1200', 'crop'::products_category_enum, 22000.00, 300, 'Villa de Leyva', (SELECT id FROM users WHERE email = 'seller2@vincobov.com')),
+    ('Arroz blanco premium', 'Arroz refinado para consumo masivo', 'https://images.pexels.com/photos/4110251/pexels-photo-4110251.jpeg?auto=compress&cs=tinysrgb&w=1200', 'refined'::products_category_enum, 85000.00, 220, 'Bogota', (SELECT id FROM users WHERE email = 'seller5@vincobov.com')),
+    ('Frijol cargamanto clasificado', 'Grano seco seleccionado y limpio', 'https://images.pexels.com/photos/6544376/pexels-photo-6544376.jpeg?auto=compress&cs=tinysrgb&w=1200', 'refined'::products_category_enum, 145000.00, 100, 'Bucaramanga', (SELECT id FROM users WHERE email = 'seller5@vincobov.com')),
+    ('Harina de maiz amarillo', 'Empaque de 25kg para panaderia y arepas', 'https://images.pexels.com/photos/4198015/pexels-photo-4198015.jpeg?auto=compress&cs=tinysrgb&w=1200', 'refined'::products_category_enum, 92000.00, 90, 'Chiquinquira', (SELECT id FROM users WHERE email = 'seller5@vincobov.com')),
+    ('Queso campesino artesanal', 'Queso fresco elaborado en finca', 'https://images.pexels.com/photos/773253/pexels-photo-773253.jpeg?auto=compress&cs=tinysrgb&w=1200', 'refined'::products_category_enum, 32000.00, 160, 'Ubate', (SELECT id FROM users WHERE email = 'seller4@vincobov.com')),
+    ('Leche cruda refrigerada', 'Leche de tanque con control de calidad', 'https://images.pexels.com/photos/248412/pexels-photo-248412.jpeg?auto=compress&cs=tinysrgb&w=1200', 'refined'::products_category_enum, 4200.00, 1200, 'Paz de Rio', (SELECT id FROM users WHERE email = 'seller4@vincobov.com')),
+    ('Melaza para alimento', 'Suplemento energetico para ganado', 'https://images.pexels.com/photos/5946103/pexels-photo-5946103.jpeg?auto=compress&cs=tinysrgb&w=1200', 'refined'::products_category_enum, 59000.00, 70, 'Moniquira', (SELECT id FROM users WHERE email = 'seller1@vincobov.com'))
+) AS seed_products(title, description, image_url, category, price, stock, location, created_by)
 WHERE NOT EXISTS (
   SELECT 1
   FROM products p
   WHERE p.title = seed_products.title
     AND p.created_by = seed_products.created_by
 );
+
+UPDATE products p
+SET image_url = product_images.image_url
+FROM (
+  VALUES
+    ('Novillo cebado premium', 'https://images.pexels.com/photos/735968/pexels-photo-735968.jpeg?auto=compress&cs=tinysrgb&w=1200', (SELECT id FROM users WHERE email = 'seller1@vincobov.com')),
+    ('Vacas lecheras Holstein', 'https://images.pexels.com/photos/422218/pexels-photo-422218.jpeg?auto=compress&cs=tinysrgb&w=1200', (SELECT id FROM users WHERE email = 'seller3@vincobov.com')),
+    ('Ovejas de cria', 'https://images.pexels.com/photos/751689/pexels-photo-751689.jpeg?auto=compress&cs=tinysrgb&w=1200', (SELECT id FROM users WHERE email = 'seller3@vincobov.com')),
+    ('Papa pastusa seleccionada', 'https://images.pexels.com/photos/2286776/pexels-photo-2286776.jpeg?auto=compress&cs=tinysrgb&w=1200', (SELECT id FROM users WHERE email = 'seller2@vincobov.com')),
+    ('Tomate chonto fresco', 'https://images.pexels.com/photos/1327838/pexels-photo-1327838.jpeg?auto=compress&cs=tinysrgb&w=1200', (SELECT id FROM users WHERE email = 'seller2@vincobov.com')),
+    ('Cebolla larga organica', 'https://images.pexels.com/photos/533280/pexels-photo-533280.jpeg?auto=compress&cs=tinysrgb&w=1200', (SELECT id FROM users WHERE email = 'seller2@vincobov.com')),
+    ('Arroz blanco premium', 'https://images.pexels.com/photos/4110251/pexels-photo-4110251.jpeg?auto=compress&cs=tinysrgb&w=1200', (SELECT id FROM users WHERE email = 'seller5@vincobov.com')),
+    ('Frijol cargamanto clasificado', 'https://images.pexels.com/photos/6544376/pexels-photo-6544376.jpeg?auto=compress&cs=tinysrgb&w=1200', (SELECT id FROM users WHERE email = 'seller5@vincobov.com')),
+    ('Harina de maiz amarillo', 'https://images.pexels.com/photos/4198015/pexels-photo-4198015.jpeg?auto=compress&cs=tinysrgb&w=1200', (SELECT id FROM users WHERE email = 'seller5@vincobov.com')),
+    ('Queso campesino artesanal', 'https://images.pexels.com/photos/773253/pexels-photo-773253.jpeg?auto=compress&cs=tinysrgb&w=1200', (SELECT id FROM users WHERE email = 'seller4@vincobov.com')),
+    ('Leche cruda refrigerada', 'https://images.pexels.com/photos/248412/pexels-photo-248412.jpeg?auto=compress&cs=tinysrgb&w=1200', (SELECT id FROM users WHERE email = 'seller4@vincobov.com')),
+    ('Melaza para alimento', 'https://images.pexels.com/photos/5946103/pexels-photo-5946103.jpeg?auto=compress&cs=tinysrgb&w=1200', (SELECT id FROM users WHERE email = 'seller1@vincobov.com'))
+) AS product_images(title, image_url, created_by)
+WHERE p.title = product_images.title
+  AND p.created_by = product_images.created_by;
 
 INSERT INTO orders (buyer_id, product_id, quantity, unit_price, total_price, status)
 SELECT * FROM (

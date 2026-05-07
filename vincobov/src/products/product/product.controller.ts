@@ -29,29 +29,28 @@ interface RequestWithUser {
 }
 
 @Controller('product')
-@UseGuards(AuthGuard('jwt'), PermissionsGuard)
 export class ProductController {
   constructor(private readonly productService: ProductService) {}
 
   @Post()
+  @UseGuards(AuthGuard('jwt'), PermissionsGuard)
   @Permissions('product:create')
   create(@Body() createProductDto: CreateProductDto) {
     return this.productService.create(createProductDto);
   }
 
   @Get()
-  @Permissions('product:read')
   findAll(@Query() query: FindProductsQueryDto) {
     return this.productService.findAll(query);
   }
 
   @Get(':id')
-  @Permissions('product:read')
   findOne(@Param('id', ParseIntPipe) id: number) {
     return this.productService.findOne(id);
   }
 
   @Patch(':id')
+  @UseGuards(AuthGuard('jwt'), PermissionsGuard)
   @Permissions('product:update')
   update(
     @Param('id', ParseIntPipe) id: number,
@@ -61,6 +60,7 @@ export class ProductController {
   }
 
   @Post(':id/purchase')
+  @UseGuards(AuthGuard('jwt'), PermissionsGuard)
   @Permissions('product:purchase')
   purchase(
     @Param('id', ParseIntPipe) id: number,
@@ -79,6 +79,7 @@ export class ProductController {
   }
 
   @Delete(':id')
+  @UseGuards(AuthGuard('jwt'), PermissionsGuard)
   @Permissions('product:delete')
   remove(@Param('id', ParseIntPipe) id: number) {
     return this.productService.remove(id);

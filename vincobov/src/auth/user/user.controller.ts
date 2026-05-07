@@ -1,11 +1,13 @@
 import {
   Controller,
+  ForbiddenException,
   Get,
   Post,
   Body,
   Param,
   Patch,
   Delete,
+  Req,
   UseGuards,
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
@@ -17,6 +19,19 @@ import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { GetUserParamsDto } from './dto/get-user-params.dto';
+
+interface RequestWithUser {
+  user?: {
+    id?: number;
+    role?: {
+      rolePermissions?: Array<{
+        permission?: {
+          name?: string;
+        };
+      }>;
+    };
+  };
+}
 
 @Controller('users')
 export class UserController {
@@ -46,9 +61,28 @@ export class UserController {
 
   // UPDATE
   @Patch(':id')
-  @UseGuards(AuthGuard('jwt'), PermissionsGuard)
-  @Permissions('user:update')
-  update(@Param() params: GetUserParamsDto, @Body() data: UpdateUserDto) {
+  @UseGuards(AuthGuard('jwt'))
+  update(
+    @Param() params: GetUserParamsDto,
+    @Body() data: UpdateUserDto,
+    @Req() request: RequestWithUser,
+  ) {
+    const authUserId = request.user?.id;
+    if (!authUserId) {
+      throw new ForbiddenException('No autorizado');
+    }
+
+    const isSelfUpdate = authUserId === params.id;
+    const permissions =
+      request.user?.role?.rolePermissions
+        ?.map((rolePermission) => rolePermission.permission?.name)
+        .filter((permissionName): permissionName is string => !!permissionName) ?? [];
+    const canUpdateAnyUser = permissions.includes('user:update');
+
+    if (!isSelfUpdate && !canUpdateAnyUser) {
+      throw new ForbiddenException('No tienes permisos para actualizar este usuario');
+    }
+
     return this.userService.update(params.id, data);
   }
 

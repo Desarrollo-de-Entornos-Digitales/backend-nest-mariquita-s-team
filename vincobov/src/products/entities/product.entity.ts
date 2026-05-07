@@ -25,6 +25,9 @@ export class Product {
   @Column({ length: 500 })
   description: string;
 
+  @Column({ name: 'image_url', length: 500, nullable: true })
+  imageUrl: string;
+
   @Column({ type: 'enum', enum: ProductCategory })
   category: ProductCategory;
 
