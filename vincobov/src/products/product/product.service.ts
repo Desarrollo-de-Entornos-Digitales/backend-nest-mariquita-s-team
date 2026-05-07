@@ -51,6 +51,10 @@ export class ProductService {
       qb.take(query.limit);
     }
 
+    if (query.offset !== undefined) {
+      qb.skip(query.offset);
+    }
+
     return await qb.getMany();
   }
 

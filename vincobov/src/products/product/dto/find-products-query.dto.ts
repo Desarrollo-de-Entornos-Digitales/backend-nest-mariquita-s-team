@@ -37,4 +37,10 @@ export class FindProductsQueryDto {
   @Min(1)
   @Max(100)
   limit?: number;
+
+  @IsOptional()
+  @Type(() => Number)
+  @IsNumber()
+  @Min(0)
+  offset?: number;
 }

@@ -76,11 +76,15 @@ export class UserController {
     const permissions =
       request.user?.role?.rolePermissions
         ?.map((rolePermission) => rolePermission.permission?.name)
-        .filter((permissionName): permissionName is string => !!permissionName) ?? [];
+        .filter(
+          (permissionName): permissionName is string => !!permissionName,
+        ) ?? [];
     const canUpdateAnyUser = permissions.includes('user:update');
 
     if (!isSelfUpdate && !canUpdateAnyUser) {
-      throw new ForbiddenException('No tienes permisos para actualizar este usuario');
+      throw new ForbiddenException(
+        'No tienes permisos para actualizar este usuario',
+      );
     }
 
     return this.userService.update(params.id, data);
