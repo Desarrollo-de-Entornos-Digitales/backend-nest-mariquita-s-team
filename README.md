@@ -1,1 +1,9 @@
 # backend-nest-mariquita-s-team
+
+- **Problema que se desea resolver:** El problema que se desea resolver es facilitar la compra de ganado, cultivos y mercado refinado, mediante una aplicación, debido a que no existe ninguna plataforma que les ayude a las personas a realizar este tipo de transacciones. Con el objetivo de volverlo un proceso efectivo y eficaz para los usuarios.
+
+- **Público objetivo:** El público objetivo son las personas que trabajan en cría de ganado y por ende cuentan con un ganado que desean vender. También los granjeros que requieran ampliar sus bases económicas, ya que necesitan diversos suministros.
+
+- **Propuesta de valor de la solución:** Nuestra propuesta de valor ofrece al público un ecosistema digital especializado en el sector agropecuario, donde permite a los criadores y agricultores poder publicar, gestionar y vender sus productos, tales como ganado, cultivos y derivados como leche, huevos o lana, de manera efectiva, sencilla y sobre todo confiable. A diferencia de Mercado Libre o Facebook Marketplace, que son plataformas generales de comercio, nuestra aplicación está diseñada específicamente para el sector rural. De este modo priorizamos sus dinámicas productivas, necesidades logísticas y las características del mercado agropecuario. Aportando valores a los usuarios, como la especialización sectorial, la facilidad de publicación y compra en un solo lugar, la optimización del proceso comercial, ya que habría menos intermediarios. También se genera un mayor alcance de clientes potenciales que ayuda a mejorar la rentabilidad del productor y de esta manera digitalizamos el sector rural.
+
+- **Alcance general del sistema:** Un alcance donde el vendedor sube sus artículos (el ganado, los cultivos o mercado refinado) a la plataforma y el público objetivo (el comprador) los adquiere.
