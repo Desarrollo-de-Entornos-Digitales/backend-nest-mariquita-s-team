@@ -9,6 +9,8 @@ import { Repository } from 'typeorm';
 import { User } from '../../auth/entities/user.entity';
 import { Chat } from '../entities/chat.entity';
 import { Message } from '../entities/message.entity';
+import { NotificationType } from '../entities/notification.entity';
+import { NotificationsService } from '../notifications/notifications.service';
 import { CreateMessageDto } from './dto/create-message.dto';
 import { UpdateMessageDto } from './dto/update-message.dto';
 
@@ -21,6 +23,7 @@ export class MessageService {
     private readonly chatRepository: Repository<Chat>,
     @InjectRepository(User)
     private readonly userRepository: Repository<User>,
+    private readonly notificationsService: NotificationsService,
   ) {}
 
   async create(createMessageDto: CreateMessageDto): Promise<Message> {
@@ -54,7 +57,20 @@ export class MessageService {
       sender,
       content: createMessageDto.content,
     });
-    return this.messageRepository.save(message);
+    const saved = await this.messageRepository.save(message);
+
+    const recipientId =
+      sender.id === chat.seller.id ? chat.buyer.id : chat.seller.id;
+
+    await this.notificationsService.createForUser({
+      recipientId,
+      type: NotificationType.MESSAGE,
+      title: 'New message',
+      body: createMessageDto.content.slice(0, 160),
+      metadata: { chatId: chat.id, senderId: sender.id },
+    });
+
+    return saved;
   }
 
   async findAll(): Promise<Message[]> {

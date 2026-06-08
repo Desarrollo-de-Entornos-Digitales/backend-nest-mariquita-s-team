@@ -10,6 +10,14 @@ import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
 import { User } from '../../auth/entities/user.entity';
 import { FindProductsQueryDto } from './dto/find-products-query.dto';
+import {
+  Order,
+  OrderStatus,
+  ShippingStatus,
+} from '../../marketplace/entities/order.entity';
+import { NotificationsService } from '../../marketplace/notifications/notifications.service';
+import { NotificationType } from '../../marketplace/entities/notification.entity';
+import { SHIPPING_STAGES } from '../../marketplace/shipping/shipping-stages';
 
 @Injectable()
 export class ProductService {
@@ -18,6 +26,9 @@ export class ProductService {
     private readonly productRepository: Repository<Product>,
     @InjectRepository(User)
     private readonly userRepository: Repository<User>,
+    @InjectRepository(Order)
+    private readonly orderRepository: Repository<Order>,
+    private readonly notificationsService: NotificationsService,
   ) {}
 
   async create(createProductDto: CreateProductDto): Promise<Product> {
@@ -41,7 +52,8 @@ export class ProductService {
   async findAll(query: FindProductsQueryDto): Promise<Product[]> {
     const qb = this.productRepository
       .createQueryBuilder('product')
-      .leftJoinAndSelect('product.createdBy', 'createdBy');
+      .leftJoinAndSelect('product.createdBy', 'createdBy')
+      .leftJoinAndSelect('createdBy.role', 'createdByRole');
 
     this.applyFilters(qb, query);
 
@@ -61,7 +73,7 @@ export class ProductService {
   async findOne(id: number): Promise<Product> {
     const product = await this.productRepository.findOne({
       where: { id },
-      relations: ['createdBy'],
+      relations: ['createdBy', 'createdBy.role'],
     });
     if (!product) {
       throw new NotFoundException(`Producto con ID ${id} no encontrado`);
@@ -111,6 +123,7 @@ export class ProductService {
     buyerUserId: number;
     quantity: number;
     remainingStock: number;
+    orderId: number;
   }> {
     const product = await this.findOne(productId);
 
@@ -126,15 +139,66 @@ export class ProductService {
       );
     }
 
+    const buyer = await this.userRepository.findOneBy({ id: buyerUserId });
+    if (!buyer) {
+      throw new NotFoundException(
+        `No se encontro el comprador con id ${buyerUserId}`,
+      );
+    }
+
     product.stock -= quantity;
     const savedProduct = await this.productRepository.save(product);
 
+    const unitPrice = Number(product.price);
+    const totalPrice = unitPrice * quantity;
+
+    const initialShippingStage = SHIPPING_STAGES[0];
+
+    const order = this.orderRepository.create({
+      buyer,
+      product,
+      quantity,
+      unitPrice,
+      totalPrice,
+      status: OrderStatus.PAID,
+      shippingStatus: ShippingStatus.ORDER_CONFIRMED,
+      shippingDetails: null,
+    });
+    const savedOrder = await this.orderRepository.save(order);
+
+    await this.notificationsService.createForUser({
+      recipientId: product.createdBy.id,
+      type: NotificationType.PURCHASE,
+      title: 'New purchase',
+      body: `Someone bought ${quantity} unit(s) of "${product.title}".`,
+      metadata: {
+        productId: product.id,
+        orderId: savedOrder.id,
+        buyerId: buyerUserId,
+      },
+    });
+
+    if (initialShippingStage) {
+      await this.notificationsService.createForUser({
+        recipientId: buyerUserId,
+        type: NotificationType.SHIPPING,
+        title: initialShippingStage.title,
+        body: initialShippingStage.body,
+        metadata: {
+          productId: product.id,
+          orderId: savedOrder.id,
+          shippingStatus: initialShippingStage.status,
+        },
+      });
+    }
+
     return {
-      message: 'Compra registrada exitosamente',
+      message: 'Purchase completed successfully',
       productId,
       buyerUserId,
       quantity,
       remainingStock: savedProduct.stock,
+      orderId: savedOrder.id,
     };
   }
 
@@ -165,6 +229,12 @@ export class ProductService {
 
     if (query.maxPrice !== undefined) {
       qb.andWhere('product.price <= :maxPrice', { maxPrice: query.maxPrice });
+    }
+
+    if (query.createdBy !== undefined) {
+      qb.andWhere('createdBy.id = :createdBy', {
+        createdBy: query.createdBy,
+      });
     }
   }
 }

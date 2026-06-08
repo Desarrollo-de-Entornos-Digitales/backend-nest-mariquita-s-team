@@ -12,6 +12,8 @@ export interface AuthLoginResponse {
   user: {
     id: number;
     email: string;
+    username: string;
+    avatarUrl?: string | null;
   };
   access_token: string;
 }
@@ -59,7 +61,12 @@ export class AuthService {
     };
 
     return {
-      user: { id: user.id, email: user.email },
+      user: {
+        id: user.id,
+        email: user.email,
+        username: user.username,
+        avatarUrl: user.avatarUrl ?? null,
+      },
       access_token: this.jwtService.sign(payload),
     };
   }

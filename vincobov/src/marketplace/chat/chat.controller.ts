@@ -28,6 +28,12 @@ export class ChatController {
     return this.chatService.create(createChatDto);
   }
 
+  @Post('find-or-create')
+  @Permissions('chat:create')
+  findOrCreate(@Body() createChatDto: CreateChatDto) {
+    return this.chatService.findOrCreate(createChatDto);
+  }
+
   @Get()
   @Permissions('chat:read')
   findAll() {

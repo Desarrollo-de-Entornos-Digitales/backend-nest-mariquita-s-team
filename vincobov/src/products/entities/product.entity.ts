@@ -10,8 +10,11 @@ import { User } from '../../auth/entities/user.entity';
 
 export enum ProductCategory {
   LIVESTOCK = 'livestock',
+  // Deprecated: legacy value kept for backward compatibility with existing DB data.
   CROP = 'crop',
+  AGRICULTURE = 'agriculture',
   REFINED = 'refined',
+  SUPPLIES_EQUIPMENT = 'supplies_equipment',
 }
 
 @Entity('products')

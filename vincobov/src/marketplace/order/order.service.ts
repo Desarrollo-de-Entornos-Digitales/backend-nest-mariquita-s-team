@@ -1,10 +1,21 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  ForbiddenException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 
 import { User } from '../../auth/entities/user.entity';
 import { Product } from '../../products/entities/product.entity';
-import { Order, OrderStatus } from '../entities/order.entity';
+import { NotificationType } from '../entities/notification.entity';
+import { Order, OrderStatus, ShippingStatus } from '../entities/order.entity';
+import { NotificationsService } from '../notifications/notifications.service';
+import {
+  SHIPPING_STAGES,
+  getNextShippingStage,
+  getShippingStageIndex,
+} from '../shipping/shipping-stages';
 import { CreateOrderDto } from './dto/create-order.dto';
 import { UpdateOrderDto } from './dto/update-order.dto';
 
@@ -17,6 +28,7 @@ export class OrderService {
     private readonly userRepository: Repository<User>,
     @InjectRepository(Product)
     private readonly productRepository: Repository<Product>,
+    private readonly notificationsService: NotificationsService,
   ) {}
 
   async create(createOrderDto: CreateOrderDto): Promise<Order> {
@@ -55,9 +67,71 @@ export class OrderService {
 
   async findAll(): Promise<Order[]> {
     return this.orderRepository.find({
-      relations: ['buyer', 'product'],
+      relations: ['buyer', 'product', 'product.createdBy'],
       order: { createdAt: 'DESC' },
     });
+  }
+
+  async findBySeller(sellerId: number): Promise<Order[]> {
+    return this.orderRepository
+      .createQueryBuilder('order')
+      .leftJoinAndSelect('order.buyer', 'buyer')
+      .leftJoinAndSelect('order.product', 'product')
+      .leftJoinAndSelect('product.createdBy', 'createdBy')
+      .where('createdBy.id = :sellerId', { sellerId })
+      .orderBy('order.createdAt', 'DESC')
+      .getMany();
+  }
+
+  async findByBuyer(buyerId: number): Promise<Order[]> {
+    return this.orderRepository.find({
+      where: { buyer: { id: buyerId } },
+      relations: ['buyer', 'product', 'product.createdBy'],
+      order: { createdAt: 'DESC' },
+    });
+  }
+
+  async findOneForBuyer(orderId: number, buyerId: number): Promise<Order> {
+    const order = await this.findOne(orderId);
+    if (order.buyer.id !== buyerId) {
+      throw new ForbiddenException('You do not have access to this order.');
+    }
+    return order;
+  }
+
+  async advanceShipping(orderId: number, buyerId: number) {
+    const order = await this.findOneForBuyer(orderId, buyerId);
+    const currentIndex = getShippingStageIndex(order.shippingStatus);
+    const nextStage = getNextShippingStage(order.shippingStatus);
+
+    if (!nextStage || currentIndex >= SHIPPING_STAGES.length - 1) {
+      return {
+        order,
+        completed: order.shippingStatus === ShippingStatus.DELIVERED,
+        notification: null,
+      };
+    }
+
+    order.shippingStatus = nextStage.status;
+    const savedOrder = await this.orderRepository.save(order);
+
+    const notification = await this.notificationsService.createForUser({
+      recipientId: buyerId,
+      type: NotificationType.SHIPPING,
+      title: nextStage.title,
+      body: nextStage.body,
+      metadata: {
+        orderId: savedOrder.id,
+        shippingStatus: nextStage.status,
+        productId: savedOrder.product.id,
+      },
+    });
+
+    return {
+      order: savedOrder,
+      notification,
+      completed: nextStage.status === ShippingStatus.DELIVERED,
+    };
   }
 
   async findOne(id: number): Promise<Order> {

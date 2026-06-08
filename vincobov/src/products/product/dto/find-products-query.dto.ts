@@ -43,4 +43,11 @@ export class FindProductsQueryDto {
   @IsNumber()
   @Min(0)
   offset?: number;
+
+  /** Filtra productos por ID del vendedor (usuario creador). */
+  @IsOptional()
+  @Type(() => Number)
+  @IsNumber()
+  @Min(1)
+  createdBy?: number;
 }

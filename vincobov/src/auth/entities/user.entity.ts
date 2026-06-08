@@ -25,6 +25,12 @@ export class User {
   @Column({ length: 255, nullable: true })
   bio: string;
 
+  @Column({ name: 'avatar_url', type: 'text', nullable: true })
+  avatarUrl: string;
+
+  @Column({ name: 'profile_description', length: 500, nullable: true })
+  profileDescription: string;
+
   @Column({
     name: 'created_at',
     type: 'timestamp',

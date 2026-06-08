@@ -58,6 +58,8 @@ export class UserService {
       email,
       username,
       bio,
+      avatarUrl: data.avatarUrl,
+      profileDescription: data.profileDescription,
       passwordHash,
       role,
     });
@@ -130,6 +132,8 @@ export class UserService {
       email: data.email ?? user.email,
       username: data.username ?? user.username,
       bio: data.bio ?? user.bio,
+      avatarUrl: data.avatarUrl ?? user.avatarUrl,
+      profileDescription: data.profileDescription ?? user.profileDescription,
     });
 
     return this.userRepository.save(user);
