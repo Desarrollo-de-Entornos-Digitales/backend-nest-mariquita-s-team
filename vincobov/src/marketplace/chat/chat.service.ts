@@ -20,6 +20,22 @@ export class ChatService {
     private readonly userRepository: Repository<User>,
   ) {}
 
+  async findOrCreate(createChatDto: CreateChatDto): Promise<Chat> {
+    const existing = await this.chatRepository.findOne({
+      where: {
+        seller: { id: createChatDto.sellerId },
+        buyer: { id: createChatDto.buyerId },
+      },
+      relations: ['seller', 'buyer'],
+    });
+
+    if (existing) {
+      return existing;
+    }
+
+    return this.create(createChatDto);
+  }
+
   async create(createChatDto: CreateChatDto): Promise<Chat> {
     if (createChatDto.sellerId === createChatDto.buyerId) {
       throw new BadRequestException(

@@ -45,7 +45,7 @@ describe('ProductService', () => {
     const result = await service.create({
       title: 'A',
       description: 'B',
-      category: 'crop' as never,
+      category: 'agriculture' as never,
       price: 10,
       stock: 1,
       location: 'X',
@@ -61,7 +61,7 @@ describe('ProductService', () => {
       service.create({
         title: 'A',
         description: 'B',
-        category: 'crop' as never,
+        category: 'agriculture' as never,
         price: 10,
         stock: 1,
         location: 'X',

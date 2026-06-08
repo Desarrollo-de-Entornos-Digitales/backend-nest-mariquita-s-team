@@ -20,6 +20,14 @@ export class CreateUserDto {
   @IsString()
   bio?: string;
 
+  @IsOptional()
+  @IsString()
+  avatarUrl?: string;
+
+  @IsOptional()
+  @IsString()
+  profileDescription?: string;
+
   @IsInt()
   roleId: number;
 }

@@ -5,6 +5,7 @@ import { getRepositoryToken } from '@nestjs/typeorm';
 import { User } from '../../auth/entities/user.entity';
 import { Product } from '../../products/entities/product.entity';
 import { Order } from '../entities/order.entity';
+import { NotificationsService } from '../notifications/notifications.service';
 import { OrderService } from './order.service';
 
 describe('OrderService', () => {
@@ -19,6 +20,9 @@ describe('OrderService', () => {
   };
   const mockUserRepository = { findOneBy: jest.fn() };
   const mockProductRepository = { findOneBy: jest.fn() };
+  const mockNotificationsService = {
+    createForUser: jest.fn(),
+  };
 
   beforeEach(async () => {
     jest.clearAllMocks();
@@ -30,6 +34,10 @@ describe('OrderService', () => {
         {
           provide: getRepositoryToken(Product),
           useValue: mockProductRepository,
+        },
+        {
+          provide: NotificationsService,
+          useValue: mockNotificationsService,
         },
       ],
     }).compile();

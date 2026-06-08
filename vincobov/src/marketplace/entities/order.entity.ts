@@ -15,6 +15,16 @@ export enum OrderStatus {
   CANCELLED = 'cancelled',
 }
 
+export enum ShippingStatus {
+  ORDER_CONFIRMED = 'order_confirmed',
+  PAYMENT_VERIFIED = 'payment_verified',
+  PREPARING = 'preparing',
+  HANDED_TO_CARRIER = 'handed_to_carrier',
+  IN_TRANSIT = 'in_transit',
+  OUT_FOR_DELIVERY = 'out_for_delivery',
+  DELIVERED = 'delivered',
+}
+
 @Entity('orders')
 export class Order {
   @PrimaryGeneratedColumn()
@@ -39,6 +49,17 @@ export class Order {
 
   @Column({ type: 'enum', enum: OrderStatus, default: OrderStatus.PENDING })
   status: OrderStatus;
+
+  @Column({
+    type: 'enum',
+    enum: ShippingStatus,
+    name: 'shipping_status',
+    nullable: true,
+  })
+  shippingStatus: ShippingStatus | null;
+
+  @Column({ type: 'jsonb', name: 'shipping_details', nullable: true })
+  shippingDetails: Record<string, unknown> | null;
 
   @Column({
     name: 'created_at',

@@ -53,9 +53,28 @@ export class UserController {
 
   // READ ONE
   @Get(':id')
-  @UseGuards(AuthGuard('jwt'), PermissionsGuard)
-  @Permissions('user:read')
-  findOne(@Param() params: GetUserParamsDto) {
+  @UseGuards(AuthGuard('jwt'))
+  findOne(@Param() params: GetUserParamsDto, @Req() request: RequestWithUser) {
+    const authUserId = request.user?.id;
+    if (!authUserId) {
+      throw new ForbiddenException('No autorizado');
+    }
+
+    const isSelfRead = authUserId === params.id;
+    const permissions =
+      request.user?.role?.rolePermissions
+        ?.map((rolePermission) => rolePermission.permission?.name)
+        .filter(
+          (permissionName): permissionName is string => !!permissionName,
+        ) ?? [];
+    const canReadAnyUser = permissions.includes('user:read');
+
+    if (!isSelfRead && !canReadAnyUser) {
+      throw new ForbiddenException(
+        'No tienes permisos para ver este usuario',
+      );
+    }
+
     return this.userService.findOne(params.id);
   }
 
