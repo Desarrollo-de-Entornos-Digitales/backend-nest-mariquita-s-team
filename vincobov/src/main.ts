@@ -3,11 +3,19 @@ import { ValidationPipe } from '@nestjs/common';
 
 import { AppModule } from './app.module';
 
+function isVercelOrigin(origin: string): boolean {
+  return /^https:\/\/[a-z0-9][a-z0-9-]*\.vercel\.app$/i.test(origin);
+}
+
 function isOriginAllowed(origin: string): boolean {
   if (
     /^https?:\/\/localhost(:\d+)?$/.test(origin) ||
     /^https?:\/\/127\.0\.0\.1(:\d+)?$/.test(origin)
   ) {
+    return true;
+  }
+
+  if (isVercelOrigin(origin)) {
     return true;
   }
 
@@ -20,10 +28,7 @@ function isOriginAllowed(origin: string): boolean {
     return true;
   }
 
-  if (
-    allowedOrigins.includes('*.vercel.app') &&
-    /^https:\/\/[a-z0-9-]+\.vercel\.app$/.test(origin)
-  ) {
+  if (allowedOrigins.includes('*.vercel.app') && isVercelOrigin(origin)) {
     return true;
   }
 
@@ -41,7 +46,7 @@ async function bootstrap() {
         callback(null, true);
         return;
       }
-      callback(new Error(`Origin ${origin} not allowed by CORS`));
+      callback(null, false);
     },
     credentials: true,
     allowedHeaders: ['Content-Type', 'Authorization'],
